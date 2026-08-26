@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <!-- تحديد ترميز الصفحة -->
+    <meta charset="UTF-8">
+
+    <!-- جعل الصفحة متجاوبة مع مختلف أحجام الشاشات -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- عنوان الصفحة -->
+    <title>نظام التنبؤ بأمراض القلب</title>
+
+    <!-- ربط ملف CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- الحاوية الرئيسية -->
+    <div class="container">
+
+        <!-- رأس الصفحة -->
+        <header class="header">
+
+            <h1>نظام التنبؤ بأمراض القلب</h1>
+
+            <p>
+                نظام ذكي للمساعدة في تقييم احتمالية الإصابة بأمراض القلب
+                باستخدام تقنيات تعلم الآلة.
+            </p>
+
+        </header>
+
+
+        <!-- بطاقة إدخال بيانات المريض -->
+        <main class="card">
+
+            <h2>بيانات المريض</h2>
+
+            <p class="description">
+                يرجى إدخال البيانات الطبية المطلوبة للحصول على تقييم مبدئي.
+            </p>
+
+
+            <!-- نموذج بيانات المريض -->
+            <form id="predictionForm">
+
+                <!-- العمر -->
+                <div class="form-group">
+
+                    <label for="age">العمر</label>
+
+                    <input
+                        type="number"
+                        id="age"
+                        min="1"
+                        max="120"
+                        placeholder="مثال: 55"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- الجنس -->
+                <div class="form-group">
+
+                    <label for="sex">الجنس</label>
+
+                    <select id="sex" required>
+
+                        <option value="">اختر الجنس</option>
+
+                        <option value="Male">ذكر</option>
+
+                        <option value="Female">أنثى</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- مصدر البيانات -->
+                <div class="form-group">
+
+                    <label for="dataset">مصدر البيانات</label>
+
+                    <select id="dataset" required>
+
+                        <option value="">اختر المصدر</option>
+
+                        <option value="Cleveland">Cleveland</option>
+
+                        <option value="Hungary">Hungary</option>
+
+                        <option value="Switzerland">Switzerland</option>
+
+                        <option value="VA Long Beach">
+                            VA Long Beach
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- نوع ألم الصدر -->
+                <div class="form-group">
+
+                    <label for="cp">نوع ألم الصدر</label>
+
+                    <select id="cp" required>
+
+                        <option value="">اختر نوع الألم</option>
+
+                        <option value="typical angina">
+                            Typical Angina
+                        </option>
+
+                        <option value="atypical angina">
+                            Atypical Angina
+                        </option>
+
+                        <option value="non-anginal">
+                            Non-anginal
+                        </option>
+
+                        <option value="asymptomatic">
+                            Asymptomatic
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ضغط الدم -->
+                <div class="form-group">
+
+                    <label for="trestbps">
+                        ضغط الدم أثناء الراحة
+                    </label>
+
+                    <input
+                        type="number"
+                        id="trestbps"
+                        placeholder="مثال: 140"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- الكوليسترول -->
+                <div class="form-group">
+
+                    <label for="chol">
+                        مستوى الكوليسترول
+                    </label>
+
+                    <input
+                        type="number"
+                        id="chol"
+                        placeholder="مثال: 250"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- سكر الدم -->
+                <div class="form-group">
+
+                    <label for="fbs">
+                        سكر الدم الصائم
+                    </label>
+
+                    <select id="fbs" required>
+
+                        <option value="">اختر الحالة</option>
+
+                        <option value="false">
+                            طبيعي
+                        </option>
+
+                        <option value="true">
+                            مرتفع
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- تخطيط القلب -->
+                <div class="form-group">
+
+                    <label for="restecg">
+                        نتيجة تخطيط القلب
+                    </label>
+
+                    <select id="restecg" required>
+
+                        <option value="">اختر النتيجة</option>
+
+                        <option value="normal">
+                            Normal
+                        </option>
+
+                        <option value="lv hypertrophy">
+                            LV Hypertrophy
+                        </option>
+
+                        <option value="st-t abnormality">
+                            ST-T Abnormality
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- أعلى معدل لضربات القلب -->
+                <div class="form-group">
+
+                    <label for="thalch">
+                        أعلى معدل لضربات القلب
+                    </label>
+
+                    <input
+                        type="number"
+                        id="thalch"
+                        placeholder="مثال: 150"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- الذبحة الناتجة عن الجهد -->
+                <div class="form-group">
+
+                    <label for="exang">
+                        الذبحة الناتجة عن الجهد
+                    </label>
+
+                    <select id="exang" required>
+
+                        <option value="">اختر الحالة</option>
+
+                        <option value="false">
+                            لا
+                        </option>
+
+                        <option value="true">
+                            نعم
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Oldpeak -->
+                <div class="form-group">
+
+                    <label for="oldpeak">
+                        Oldpeak
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        id="oldpeak"
+                        placeholder="مثال: 1.2"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- ميل ST -->
+                <div class="form-group">
+
+                    <label for="slope">
+                        ميل ST
+                    </label>
+
+                    <select id="slope" required>
+
+                        <option value="">اختر الميل</option>
+
+                        <option value="upsloping">
+                            Upsloping
+                        </option>
+
+                        <option value="flat">
+                            Flat
+                        </option>
+
+                        <option value="downsloping">
+                            Downsloping
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- عدد الأوعية -->
+                <div class="form-group">
+
+                    <label for="ca">
+                        عدد الأوعية الرئيسية
+                    </label>
+
+                    <input
+                        type="number"
+                        id="ca"
+                        min="0"
+                        max="3"
+                        placeholder="من 0 إلى 3"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Thal -->
+                <div class="form-group">
+
+                    <label for="thal">
+                        نتيجة Thal
+                    </label>
+
+                    <select id="thal" required>
+
+                        <option value="">اختر النتيجة</option>
+
+                        <option value="normal">
+                            Normal
+                        </option>
+
+                        <option value="fixed defect">
+                            Fixed Defect
+                        </option>
+
+                        <option value="reversable defect">
+                            Reversable Defect
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- زر التحليل -->
+                <button type="submit" id="submitButton">
+
+                    تحليل الحالة
+
+                </button>
+
+            </form>
+
+
+            <!-- مؤشر التحميل -->
+            <div id="loading" class="loading hidden">
+
+                جاري تحليل البيانات...
+
+            </div>
+
+
+            <!-- مكان عرض النتيجة -->
+            <div id="result" class="result hidden"></div>
+
+        </main>
+
+
+        <!-- تنبيه طبي -->
+        <footer class="footer">
+
+            <strong>تنبيه:</strong>
+
+            هذا النظام لأغراض تعليمية وبحثية فقط،
+            ولا يمثل تشخيصًا طبيًا نهائيًا ولا يغني عن استشارة الطبيب المختص.
+
+        </footer>
+
+    </div>
+
+
+    <script>
+
+        // الحصول على نموذج البيانات
+        const form = document.getElementById("predictionForm");
+
+        // الحصول على مكان عرض النتيجة
+        const resultDiv = document.getElementById("result");
+
+        // الحصول على مؤشر التحميل
+        const loading = document.getElementById("loading");
+
+        // الحصول على زر التحليل
+        const submitButton = document.getElementById("submitButton");
+
+
+        // تنفيذ الكود عند إرسال النموذج
+        form.addEventListener("submit", async function(event) {
+
+            // منع إعادة تحميل الصفحة
+            event.preventDefault();
+
+
+            // إخفاء النتيجة السابقة
+            resultDiv.classList.add("hidden");
+
+
+            // إظهار مؤشر التحميل
+            loading.classList.remove("hidden");
+
+
+            // تعطيل الزر أثناء التحليل
+            submitButton.disabled = true;
+
+
+            // إنشاء بيانات المريض
+            const patientData = {
+
+                age: Number(
+                    document.getElementById("age").value
+                ),
+
+                sex:
+                    document.getElementById("sex").value,
+
+                dataset:
+                    document.getElementById("dataset").value,
+
+                cp:
+                    document.getElementById("cp").value,
+
+                trestbps: Number(
+                    document.getElementById("trestbps").value
+                ),
+
+                chol: Number(
+                    document.getElementById("chol").value
+                ),
+
+                fbs:
+                    document.getElementById("fbs").value === "true",
+
+                restecg:
+                    document.getElementById("restecg").value,
+
+                thalch: Number(
+                    document.getElementById("thalch").value
+                ),
+
+                exang:
+                    document.getElementById("exang").value === "true",
+
+                oldpeak: Number(
+                    document.getElementById("oldpeak").value
+                ),
+
+                slope:
+                    document.getElementById("slope").value,
+
+                ca: Number(
+                    document.getElementById("ca").value
+                ),
+
+                thal:
+                    document.getElementById("thal").value
+
+            };
+
+
+            try {
+
+                // إرسال البيانات إلى Flask API
+                const response = await fetch("/predict", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(patientData)
+
+                });
+
+
+                // تحويل الاستجابة إلى JSON
+                const result = await response.json();
+
+
+                // إخفاء مؤشر التحميل
+                loading.classList.add("hidden");
+
+
+                // تفعيل الزر مرة أخرى
+                submitButton.disabled = false;
+
+
+                // التحقق من وجود خطأ
+                if (!response.ok) {
+
+                    resultDiv.className = "result error";
+
+                    resultDiv.innerHTML = `
+
+                        <h2>حدث خطأ</h2>
+
+                        <p>
+                            ${result.error}
+                        </p>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                // تحديد فئة النتيجة حسب مستوى الخطورة
+                let riskClass = "low";
+
+
+                if (result.risk_level === "متوسط") {
+
+                    riskClass = "medium";
+
+                }
+
+
+                if (result.risk_level === "مرتفع") {
+
+                    riskClass = "high";
+
+                }
+
+
+                // عرض النتيجة
+                resultDiv.className =
+                    `result ${riskClass}`;
+
+
+                resultDiv.innerHTML = `
+
+                    <h2>
+                        نتيجة التحليل
+                    </h2>
+
+                    <div class="result-item">
+
+                        <span>
+                            التشخيص المبدئي
+                        </span>
+
+                        <strong>
+                            ${result.diagnosis}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            احتمالية الإصابة
+                        </span>
+
+                        <strong>
+                            ${(result.probability * 100).toFixed(2)}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            مستوى الخطورة
+                        </span>
+
+                        <strong>
+                            ${result.risk_level}
+                        </strong>
+
+                    </div>
+
+
+                    <p class="medical-warning">
+
+                        هذه النتيجة تقديرية بواسطة نموذج تعلم آلي
+                        ولا تعتبر تشخيصًا طبيًا نهائيًا.
+
+                    </p>
+
+                `;
+
+            }
+
+
+            catch (error) {
+
+                // إخفاء مؤشر التحميل
+                loading.classList.add("hidden");
+
+
+                // تفعيل الزر مرة أخرى
+                submitButton.disabled = false;
+
+
+                // عرض رسالة خطأ في حالة فشل الاتصال
+                resultDiv.className = "result error";
+
+                resultDiv.innerHTML = `
+
+                    <h2>
+                        تعذر الاتصال بالنظام
+                    </h2>
+
+                    <p>
+                        حدث خطأ أثناء الاتصال بخادم التنبؤ.
+                    </p>
+
+                `;
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
