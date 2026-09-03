@@ -1,0 +1,31 @@
+# البيئة الافتراضية
+venv/
+.venv/
+
+# ملفات Python المؤقتة
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ملفات Jupyter المؤقتة
+.ipynb_checkpoints/
+
+# ملفات النظام
+.DS_Store
+Thumbs.db
+
+# ملفات IDE
+.vscode/
+.idea/
+
+# ملفات السجلات
+*.log
+
+# ملفات البيئة والمتغيرات السرية
+.env
+.env.*
+
+# ملفات البناء والتوزيع
+build/
+dist/
+*.egg-info/
